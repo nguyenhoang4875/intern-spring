@@ -1,5 +1,6 @@
 package com.intern.spring.controllers;
 
+import com.intern.spring.exeptions.CustomNotFoundException;
 import com.intern.spring.models.Task;
 import com.intern.spring.services.TaskService;
 import javassist.NotFoundException;
@@ -16,12 +17,11 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @SneakyThrows
     @GetMapping("/{id}")
     public Optional<Task> GetById(@PathVariable int id) {
         Optional<Task> task = taskService.findById(id);
         if (task.isEmpty()) {
-            throw new NotFoundException("Task is not found with id: " + id);
+            throw new CustomNotFoundException("Task is not found with id: " + id);
         }
         return task;
     }
@@ -44,12 +44,11 @@ public class TaskController {
         return task;
     }
 
-    @SneakyThrows
     @DeleteMapping("/{id}")
     public String deleteTask(@PathVariable int id) {
         Optional<Task> task = taskService.findById(id);
         if (task.isEmpty()) {
-            throw new NotFoundException("Task is not found with id: " + id);
+            throw new CustomNotFoundException("Task is not found with id: " + id);
         }
         taskService.deleteById(id);
         return "Deleted task id: " + id;
