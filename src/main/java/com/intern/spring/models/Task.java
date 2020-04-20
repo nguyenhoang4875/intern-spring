@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,18 +19,18 @@ public class Task {
     @Column(name = "id")
     private int id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
-
-    @Column(name = "assigned_user")
-    private String assignedUser;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;
 
+    @NotNull
     @Column(name = "detail")
     private String detail;
 
+    @NotNull
     @Column(name = "status")
     private String status;
 
