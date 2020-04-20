@@ -3,8 +3,6 @@ package com.intern.spring.controllers;
 import com.intern.spring.exeptions.CustomNotFoundException;
 import com.intern.spring.models.Task;
 import com.intern.spring.services.TaskService;
-import javassist.NotFoundException;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +16,10 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/{id}")
-    public Optional<Task> GetById(@PathVariable int id) {
-        Optional<Task> task = taskService.findById(id);
-        if (task.isEmpty()) {
-            throw new CustomNotFoundException("Task is not found with id: " + id);
-        }
-        return task;
+    public Task GetById(@PathVariable int id) {
+        Object task = taskService.findById(id);
+        verifyTaskExistById(id, task);
+        return (Task) task;
     }
 
     @GetMapping
@@ -38,19 +34,23 @@ public class TaskController {
         return task;
     }
 
-    @PutMapping
-    public Task updateTask(@RequestBody Task task) {
+    @PutMapping("/{id}")
+    public Task updateTask(@RequestBody Task task, @PathVariable int id) {
+        task.setId(id);
         taskService.save(task);
         return task;
     }
 
     @DeleteMapping("/{id}")
-    public String deleteTask(@PathVariable int id) {
+    public void deleteTask(@PathVariable int id) {
         Optional<Task> task = taskService.findById(id);
-        if (task.isEmpty()) {
+        verifyTaskExistById(id, task);
+        taskService.deleteById(id);
+    }
+
+    public void verifyTaskExistById(@PathVariable int id, Object object) {
+        if (object == null) {
             throw new CustomNotFoundException("Task is not found with id: " + id);
         }
-        taskService.deleteById(id);
-        return "Deleted task id: " + id;
     }
 }
