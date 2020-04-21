@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class CustomExceptionHandler {
 
@@ -13,7 +15,7 @@ public class CustomExceptionHandler {
         CustomErrorResponse error = new CustomErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
-                System.currentTimeMillis());
+                LocalDateTime.now());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
@@ -22,7 +24,7 @@ public class CustomExceptionHandler {
         CustomErrorResponse error = new CustomErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getMessage(),
-                System.currentTimeMillis());
+                LocalDateTime.now());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

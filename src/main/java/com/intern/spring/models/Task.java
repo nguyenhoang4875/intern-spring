@@ -16,22 +16,22 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column
     private int id;
 
     @NotNull
-    @Column(name = "name")
+    @Column
     private String name;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;
 
     @NotNull
-    @Column(name = "detail")
+    @Column
     private String detail;
 
     @NotNull
-    @Column(name = "status")
+    @Column
     private String status;
 
 }
