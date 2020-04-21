@@ -39,4 +39,9 @@ public class TaskServiceImpl implements TaskService {
     public void deleteById(int id) {
         taskRepository.deleteById(id);
     }
+
+    @Override
+    public void truncateTable() {
+        taskRepository.truncateTable();
+    }
 }

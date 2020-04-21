@@ -16,10 +16,10 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/{id}")
-    public Task GetById(@PathVariable int id) {
-        Object task = taskService.findById(id);
+    public Optional<Task> GetById(@PathVariable int id) {
+        Optional<Task> task = taskService.findById(id);
         verifyTaskExistById(id, task);
-        return (Task) task;
+        return task;
     }
 
     @GetMapping
@@ -48,8 +48,8 @@ public class TaskController {
         taskService.deleteById(id);
     }
 
-    public void verifyTaskExistById(@PathVariable int id, Object object) {
-        if (object == null) {
+    public void verifyTaskExistById(@PathVariable int id, Optional<Task> task) {
+        if (task.isEmpty()) {
             throw new CustomNotFoundException("Task is not found with id: " + id);
         }
     }
