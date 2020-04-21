@@ -1,5 +1,6 @@
 package com.intern.spring.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.intern.spring.models.Task;
 import com.intern.spring.services.TaskService;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @WebAppConfiguration
 @EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration.class})
@@ -42,16 +45,15 @@ public class TaskControllerTest {
 
     @BeforeEach
     public void init() {
-        task1 = new Task(1, "login", "teo", LocalDateTime.of(2020, 4, 18, 22, 00, 00), "pass full test", "TODO");
-        task2 = new Task(2, "logout", "ti", LocalDateTime.of(2020, 4, 18, 23, 00, 00), "pass full test", "INPROGRESS");
+        task1 = new Task(1, "login", LocalDateTime.of(2020, 4, 18, 22, 00, 00), "pass full test", "TODO");
+        task2 = new Task(2, "logout", LocalDateTime.of(2020, 4, 18, 23, 00, 00), "pass full test", "INPROGRESS");
         taskService.save(task1);
         taskService.save(task2);
     }
 
     @AfterEach
     public void destroy() {
-        taskService.deleteById(1);
-        taskService.deleteById(2);
+        taskService.truncateTable();
     }
 
     @Test
@@ -100,9 +102,9 @@ public class TaskControllerTest {
     @Test
     public void test_put_Found() throws Exception {
         Gson gson = new Gson();
-        String json = gson.toJson(new Task(task2.getId(), "homepage", "ti", LocalDateTime.of(2020, 4, 18, 23, 00, 00), "pass full test", "INPROGRESS"));
+        String json = gson.toJson(new Task(task2.getId(), "homepage", null, "pass full test", "INPROGRESS"));
 
-        mockMvc.perform(put("/api/tasks")
+        mockMvc.perform(put("/api/tasks/" + task2.getId())
                 .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
 
@@ -114,7 +116,11 @@ public class TaskControllerTest {
     @Test
     public void test_post_ok() throws Exception {
         Gson gson = new Gson();
-        String json = gson.toJson(new Task(0, "animation", "ti", LocalDateTime.of(2020, 4, 18, 17, 00, 00), "pass full test", "DONE"));
+        String json = gson.toJson(new Task(0, "animation", null, "pass full test", "DONE"));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValueAsString(task1);
+        System.out.println(objectMapper.toString());
 
         mockMvc.perform(post("/api/tasks")
                 .contentType(MediaType.APPLICATION_JSON).content(json))
