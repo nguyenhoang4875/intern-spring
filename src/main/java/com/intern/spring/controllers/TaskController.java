@@ -16,10 +16,10 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/{id}")
-    public Object GetById(@PathVariable int id) {
+    public Task getById(@PathVariable int id) {
         Optional<Task> task = taskService.findById(id);
         verifyTaskExistById(id, task);
-        return task;
+        return task.get();
     }
 
     @GetMapping
