@@ -16,7 +16,7 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/{id}")
-    public Optional<Task> GetById(@PathVariable int id) {
+    public Object GetById(@PathVariable int id) {
         Optional<Task> task = taskService.findById(id);
         verifyTaskExistById(id, task);
         return task;
