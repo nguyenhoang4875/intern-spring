@@ -1,9 +1,11 @@
 package com.intern.spring.controllers;
 
-import com.intern.spring.models.Users;
+import com.intern.spring.models.User;
 import com.intern.spring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -15,15 +17,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<Users> getAllUser() {
+    public List<User> getAllUser() {
         return userService.findAll();
-    }
-
-    @PostMapping
-    public Users createUse(@RequestBody Users users) {
-        users.setId(0);
-        userService.save(users);
-        return users;
     }
 
 }

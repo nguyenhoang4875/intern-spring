@@ -1,6 +1,6 @@
 package com.intern.spring.services.servicesImpl;
 
-import com.intern.spring.models.Users;
+import com.intern.spring.models.User;
 import com.intern.spring.repositories.UserRepository;
 import com.intern.spring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +18,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<Users> findAll() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
     @Override
     @Transactional
-    public Optional<Users> findById(int id) {
+    public Optional<User> findById(int id) {
         return userRepository.findById(id);
     }
 
     @Override
     @Transactional
-    public void save(Users user) {
-        userRepository.save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override
